@@ -149,7 +149,7 @@ HttpServletRequest 클래스의 여러가지 메소드를 이용해서 전송된
 
 - doHandle() 메소드에서 처리
 
-- ```java
+```java
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
   		doHandle(request, response);	}
   
@@ -161,7 +161,7 @@ HttpServletRequest 클래스의 여러가지 메소드를 이용해서 전송된
 
   
 
-##### 실습
+##### 실습 1 - 회원가입 폼
 
 ```html
 <!DOCTYPE html>
@@ -294,5 +294,106 @@ public class NewMemberServlet extends HttpServlet {
 	}
 
 }
+```
+
+##### 실습 2 - 로그인 유효성
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>로그인 창</title>
+</head>
+<body>
+	<form name="frmLogin" method="post" action="loginEx">
+		아이디: <input type="text" name="user_id" /><br> 비밀번호: <input
+			type="password" name="user_pw" /><br> <input type="submit"
+			value="로그인" />
+
+	</form>
+</body>
+</html>
+```
+
+```java
+package sec02;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+
+/**
+ * Servlet implementation class loginEx
+ */
+@WebServlet("/loginEx")
+public class loginEx extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public loginEx() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doProcess(request, response);
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doProcess(request, response);
+	}
+	
+	protected void doProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("utf-8");
+		response.setContentType("text/html; charset=utf-8");
+		PrintWriter out = response.getWriter();
+		
+		String id = request.getParameter("user_id");
+		String pw = request.getParameter("user_pw");
+		
+		System.out.println("아이디: "+id);
+		System.out.println("비밀번호: "+pw);
+		
+		if(id != null && (id.length() != 0)) {
+			
+			if(pw != null && (pw.length() != 0)) {
+				out.print("<html><body>");
+				out.print(id+"님 로그인하셨습니다");
+				out.print("</body></html>");
+
+			}else {
+				out.print("<html><body>");
+				out.print("비밀번호를 다시 입력하세요<br>");
+				out.print("<a href='http://localhost:8080/Servlet001/loginEx.html'> 로그인 창으로 다시 이동</a>");
+				out.print("</body></html>");
+			}
+
+		}else {
+			out.print("<html><body>");
+			out.print("아이디를 다시 입력하세요<br>");
+			out.print("<a href='http://localhost:8080/Servlet001/loginEx.html'> 로그인 창으로 다시 이동</a>");
+			out.print("</body></html>");
+		}
+		
+		
+	}
+
+}
+
 ```
 
